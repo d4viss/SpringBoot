@@ -20,4 +20,20 @@ public class Paciente {
     @Embedded
     public Direccion direccion;
 
+    public Paciente(DatosRegistroPaciente datosRegistroPaciente) {
+        this.nombre = datosRegistroPaciente.nombre();
+        this.email = datosRegistroPaciente.email();
+        this.telefono = datosRegistroPaciente.telefono();
+        this.documento = datosRegistroPaciente.documento();
+        this.direccion = new Direccion(datosRegistroPaciente.direccion());
+    }
+
+    public void actualizar(DatosActualizarPaciente datosActualizarPaciente){
+        if(datosActualizarPaciente.nombre() != null)
+            this.nombre = datosActualizarPaciente.nombre();
+        if(datosActualizarPaciente.telefono() != null)
+            this.telefono = datosActualizarPaciente.telefono();
+        if(datosActualizarPaciente.direccion() != null)
+            this.direccion.actualizarDatos(datosActualizarPaciente.direccion());
+    }
 }
