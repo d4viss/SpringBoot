@@ -1,6 +1,5 @@
 package med.voll.api.controller;
 
-import io.swagger.annotations.Api;
 import jakarta.validation.Valid;
 import med.voll.api.domain.usuarios.DatosAutenticacionUsuario;
 import med.voll.api.domain.usuarios.Usuario;
