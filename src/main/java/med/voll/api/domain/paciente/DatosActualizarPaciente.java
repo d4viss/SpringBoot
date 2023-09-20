@@ -8,6 +8,6 @@ public record DatosActualizarPaciente (
         @NotNull Long id,
         String nombre,
         String telefono,
-        DatosDireccion direccion
+        @Valid DatosDireccion direccion
 ){
 }
