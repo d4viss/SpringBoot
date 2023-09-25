@@ -2,6 +2,7 @@ package med.voll.api.controller;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import med.voll.api.domain.medico.Medico;
 import med.voll.api.domain.paciente.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,5 +50,13 @@ public class PacienteController {
         Paciente paciente = pacienteRepository.getReferenceById(datosActualizarPaciente.id());
         paciente.actualizar(datosActualizarPaciente);
         return ResponseEntity.ok(new DatosRespuestaPaciente(paciente));
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity desactivarMedico(@PathVariable Long id){
+        Paciente paciente = pacienteRepository.getReferenceById(id);
+        paciente.desactivarPaciente();
+        return ResponseEntity.noContent().build();
     }
 }
