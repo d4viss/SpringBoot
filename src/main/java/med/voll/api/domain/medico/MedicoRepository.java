@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -17,12 +18,12 @@ public interface MedicoRepository extends JpaRepository<Medico, Long> {
             select m from Medico m
             where m.activo = true
             and
-            m.especialidad=:especialidad
+            m.especialidad = :especialidad
             and
             m.id not in(
                 select c.medico.id from Consulta c
                 where
-                c.fecha=:fecha
+                c.fecha = :fecha
             )
             order by rand()
             limit 1
@@ -31,7 +32,7 @@ public interface MedicoRepository extends JpaRepository<Medico, Long> {
 
     @Query("""
             select m.activo from Medico m
-            where m.id =: id
+            where m.id = :id
             """)
-    boolean findActivoById(Long id);
+    boolean findActivoById(@Param("id") Long id);
 }

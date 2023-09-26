@@ -7,7 +7,6 @@ import med.voll.api.domain.paciente.Paciente;
 import med.voll.api.domain.paciente.PacienteRepository;
 import med.voll.api.infra.errores.ValidacionIntegridad;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,7 +29,7 @@ public class AgendaConsultaService {
         this.validadorConsultas = validadorConsultas;
     }
 
-    public void agendar(@NotNull DatosAgendarConsulta datosAgendarConsulta){
+    public DatodDetalleConsulta agendar(@NotNull DatosAgendarConsulta datosAgendarConsulta){
         if(!pacienteRepository.findById(datosAgendarConsulta.idPaciente()).isPresent())
             throw new ValidacionIntegridad("Este id para el paciente no fue encontrado");
 
@@ -43,11 +42,16 @@ public class AgendaConsultaService {
 
         Medico medico = seleccionarMedico(datosAgendarConsulta);
 
+        if(medico == null)
+            throw new ValidacionIntegridad("No existen medicos disponibles");
+
         Paciente paciente = pacienteRepository.findById(datosAgendarConsulta.idPaciente()).get();
 
         Consulta consulta = new Consulta(null, medico, paciente, datosAgendarConsulta.fecha());
 
         consultaRespository.save(consulta);
+
+        return new DatodDetalleConsulta(consulta);
     }
 
     private Medico seleccionarMedico(DatosAgendarConsulta datosAgendarConsulta) {

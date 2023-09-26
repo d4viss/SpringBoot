@@ -1,8 +1,8 @@
 package med.voll.api.domain.consulta.validations;
 
-import jakarta.validation.ValidationException;
 import med.voll.api.domain.consulta.DatosAgendarConsulta;
 import med.voll.api.domain.paciente.PacienteRepository;
+import med.voll.api.infra.errores.ValidacionIntegridad;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
@@ -18,8 +18,8 @@ public class PacienteActivo implements ValidadorConsultas{
     public void validar(@NotNull DatosAgendarConsulta datosAgendarConsulta){
         if(datosAgendarConsulta.idPaciente() == null)
             return;
-        boolean pacienteActivo = pacienteRepository.findActivoById(datosAgendarConsulta.id());
+        boolean pacienteActivo = pacienteRepository.findActivoById(datosAgendarConsulta.idPaciente());
         if(!pacienteActivo)
-            throw new ValidationException("No se puede permitir agendar con pacientes inactivos");
+            throw new ValidacionIntegridad("No se puede permitir agendar con pacientes inactivos");
     }
 }

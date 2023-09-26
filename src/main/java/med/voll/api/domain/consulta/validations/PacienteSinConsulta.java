@@ -1,8 +1,8 @@
 package med.voll.api.domain.consulta.validations;
 
-import jakarta.validation.ValidationException;
 import med.voll.api.domain.consulta.ConsultaRespository;
 import med.voll.api.domain.consulta.DatosAgendarConsulta;
+import med.voll.api.infra.errores.ValidacionIntegridad;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +24,7 @@ public class PacienteSinConsulta implements ValidadorConsultas{
         boolean pacienteConConsulta = consultaRespository.existsByPacienteIdAndFechaBetween(datosAgendarConsulta.idPaciente(), primerHorario, ultimoHorario);
 
         if(pacienteConConsulta){
-            throw new ValidationException("No se puede");
+            throw new ValidacionIntegridad("Ese paciente ya tiene una consulta agendada para ese dia");
         }
     }
 }
