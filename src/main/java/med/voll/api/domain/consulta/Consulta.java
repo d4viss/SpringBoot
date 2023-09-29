@@ -33,7 +33,7 @@ public class Consulta {
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime fecha;
 
-    @Column(name = "motivo_cancelamiento")
+    @Column(name = "motivo")
     @Enumerated(EnumType.STRING)
     private MotivoCancelamiento motivoCancelamiento;
 
