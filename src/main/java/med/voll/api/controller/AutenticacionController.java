@@ -1,11 +1,13 @@
 package med.voll.api.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import med.voll.api.domain.usuarios.DatosAutenticacionUsuario;
 import med.voll.api.domain.usuarios.Usuario;
 import med.voll.api.infra.security.DatosJWTToken;
 import med.voll.api.infra.security.TokenService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/login")
+@Tag(name = "Autenticacion", description = "obtiene el token para el usuario asignado que da acceso al resto de endpoint")
 public class AutenticacionController {
 
     private final AuthenticationManager authenticationManager;
@@ -33,7 +36,7 @@ public class AutenticacionController {
             description = "Ingrese las credenciales"
     )
     @PostMapping
-    public ResponseEntity autenticarUsuario(@RequestBody @Valid DatosAutenticacionUsuario datosAutenticacionUsuario){
+    public ResponseEntity autenticarUsuario(@RequestBody @Valid @NotNull DatosAutenticacionUsuario datosAutenticacionUsuario){
         Authentication authenticationToken = new UsernamePasswordAuthenticationToken(
                 datosAutenticacionUsuario.login(), datosAutenticacionUsuario.clave());
         var usuario = authenticationManager.authenticate(authenticationToken);

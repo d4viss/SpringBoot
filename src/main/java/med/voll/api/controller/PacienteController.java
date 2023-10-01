@@ -1,9 +1,11 @@
 package med.voll.api.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import med.voll.api.domain.paciente.*;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -25,8 +27,9 @@ public class PacienteController {
     }
 
     @PostMapping
+    @Operation(summary = "Registra un nuevo paciente")
     public ResponseEntity<DatosRespuestaPaciente> registrarPaciente(@RequestBody @Valid DatosRegistroPaciente datosRegistroPaciente,
-                                                                    UriComponentsBuilder uriComponentsBuilder){
+                                                                    @NotNull UriComponentsBuilder uriComponentsBuilder){
         Paciente paciente = pacienteRepository.save(new Paciente(datosRegistroPaciente));
         DatosRespuestaPaciente datosRespuestaPaciente = new DatosRespuestaPaciente(paciente);
         URI uri = uriComponentsBuilder.path("/pacientes/{id}").buildAndExpand(paciente.getId()).toUri();
@@ -34,6 +37,7 @@ public class PacienteController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "obtiene los detalles para el paciente con el ID indicado")
     public ResponseEntity<DatosRespuestaPaciente> retornoPaciente(@PathVariable Long id){
         Paciente paciente = pacienteRepository.getReferenceById(id);
         DatosRespuestaPaciente datosRespuestaPaciente = new DatosRespuestaPaciente(paciente);
@@ -41,13 +45,15 @@ public class PacienteController {
     }
 
     @GetMapping
+    @Operation(summary = "Obtiene el listado para los pacientes")
     public ResponseEntity<Page<DatosListadoPacientes>> listadoPacientes(@PageableDefault(size = 10, page = 0, sort = {"nombre"}) Pageable pageable){
         return ResponseEntity.ok(pacienteRepository.findAll(pageable).map(DatosListadoPacientes::new));
     }
 
     @PutMapping
     @Transactional
-    public ResponseEntity<DatosRespuestaPaciente> actualizarPaciente(@RequestBody @Valid DatosActualizarPaciente datosActualizarPaciente){
+    @Operation(summary = "Actualiza las informaciones para el paciente")
+    public ResponseEntity<DatosRespuestaPaciente> actualizarPaciente(@RequestBody @Valid @NotNull DatosActualizarPaciente datosActualizarPaciente){
         Paciente paciente = pacienteRepository.getReferenceById(datosActualizarPaciente.id());
         paciente.actualizar(datosActualizarPaciente);
         return ResponseEntity.ok(new DatosRespuestaPaciente(paciente));
@@ -55,6 +61,7 @@ public class PacienteController {
 
     @DeleteMapping("/{id}")
     @Transactional
+    @Operation(summary = "Elimina un paciente a partir del ID")
     public ResponseEntity desactivarMedico(@PathVariable Long id){
         Paciente paciente = pacienteRepository.getReferenceById(id);
         paciente.desactivarPaciente();
