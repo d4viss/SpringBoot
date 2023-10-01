@@ -1,0 +1,1 @@
+alter table consultas add motivo varchar(100);
